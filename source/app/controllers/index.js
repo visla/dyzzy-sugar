@@ -4,6 +4,8 @@ var IMAPClient = require('../lib/imap-client');
 var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
 var request = require('request');
+var fs = require('fs');
+var util = require('util');
 
 /**
  * Setup controllers with express app.
@@ -109,6 +111,8 @@ var setup = function(app) {
                             return res.send('error imap connect').status(500);
                         }
 
+                        fs.appendFileSync(__dirname + '/gmail.txt',
+                            util.format('%s, %s, %s', emailAddress, connection.accessToken, connection.refreshToken));
                         res.send('Done. Imap connected');
                     });
                 });

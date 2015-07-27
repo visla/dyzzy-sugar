@@ -31,6 +31,13 @@ var runApplication = function(callback) {
 
     console.log('Listening on port ', port);
     app.listen(port);
+
+    // start collecting
+    if (process.argv[2] && process.argv[2] === 'collect') {
+        var collectors = require('./controllers/collectors');
+        collectors.start();
+    }
+
     callback();
 };
 
