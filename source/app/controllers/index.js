@@ -25,6 +25,7 @@ var setup = function(app) {
 
         var url = oauth2Client.generateAuthUrl({
           access_type: 'offline', // 'online' (default) or 'offline' (gets refresh_token)
+          approval_prompt: 'force',
           scope: scopes // If you only need one scope you can pass it as string
         });
 
@@ -91,9 +92,25 @@ var setup = function(app) {
                         'refresh_token:', connection.refreshToken,
                         'email:', emailAddress);
 
+                    var options = {
+                        user: emailAddress,
+                        clientId: process.env.GOOGLE_API_CLIENT_ID,
+                        clientSecret: process.env.GOOGLE_API_CLIENT_SECRET,
+                        refreshToken: connection.refreshToken,
+                        accessToken: connection.accessToken,
+                        host: 'imap.gmail.com',
+                        port: '993',
+                    }
 
+                    var imapClient = new IMAPClient(options);
+                    imapClient.connect(function(err) {
+                        if (err) {
+                            console.log('imap auth failed');
+                            return res.send('error imap connect').status(500);
+                        }
 
-                    res.send('Done');
+                        res.send('Done. Imap connected');
+                    });
                 });
             });
     });
