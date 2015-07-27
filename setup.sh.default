@@ -1,0 +1,11 @@
+export PORT=35010
+
+# Aws keys. Most likely just staging keys should be here.
+export AWS_ACCESS_KEY_ID=''
+export AWS_SECRET_ACCESS_KEY=''
+export AWS_REGION='us-east-1'
+export AWS_DEFAULT_REGION='us-east-1'
+
+# Google API client
+GOOGLE_API_CLIENT_ID=''
+GOOGLE_API_CLIENT_SECRET=''
