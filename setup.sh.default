@@ -7,5 +7,5 @@ export AWS_REGION='us-east-1'
 export AWS_DEFAULT_REGION='us-east-1'
 
 # Google API client
-GOOGLE_API_CLIENT_ID=''
-GOOGLE_API_CLIENT_SECRET=''
+export GOOGLE_API_CLIENT_ID=''
+export GOOGLE_API_CLIENT_SECRET=''
