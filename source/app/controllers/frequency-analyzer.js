@@ -15,12 +15,13 @@ exports.start = function(callback) {
             // Add node for email if necessary.
             graphNode.storeNode(emailData.sourceEmail, function() {
                 var frequencyScore = 1.0;
+                // TODO calculate freq. score
 
                 graphNode.storeNode(emailData.relatedEmail, function() {
                     graphNode.addRelationship(
                         emailData.sourceEmail,
                         emailData.relatedEmail,
-                        'frequencyScore',
+                        'frequency',
                         frequencyScore,
                         function() {
                             singleCallback();
