@@ -8,13 +8,17 @@ var dbLocal = require('seraph')({
 
 var map = {};
 
-exports.storeNode = function(email, callback) {
+exports.storeNode = function(email, name, callback) {
     var id = null;
     if (map[email]) {
         id = map[email];
     }
 
-    var object = { email: email};
+    var object = {
+        email: email,
+        name: name,
+    };
+
     if (id) {
         object.id = id;
     }

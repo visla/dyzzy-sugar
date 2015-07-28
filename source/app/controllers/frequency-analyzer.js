@@ -13,11 +13,11 @@ exports.start = function(callback) {
 
         async.eachSeries(data, function(emailData, singleCallback) {
             // Add node for email if necessary.
-            graphNode.storeNode(emailData.sourceEmail, function() {
+            graphNode.storeNode(emailData.sourceEmail, '', function() {
                 var frequencyScore = 1.0;
                 // TODO calculate freq. score
 
-                graphNode.storeNode(emailData.relatedEmail, function() {
+                graphNode.storeNode(emailData.relatedEmail, emailData.relatedName, function() {
                     graphNode.addRelationship(
                         emailData.sourceEmail,
                         emailData.relatedEmail,

@@ -54,6 +54,7 @@ exports.processInput = function(email, isSent, input) {
                     }
                 } else {
                     frequency[email][to.address] = {
+                        relatedName: to.name,
                         receivedCount: 0,
                         sentCount: 1,
                         ccSentCount: 0,
@@ -73,6 +74,7 @@ exports.processInput = function(email, isSent, input) {
                     }
                 } else {
                     frequency[email][cc.address] = {
+                        relatedName: cc.name,
                         receivedCount: 0,
                         sentCount: 0,
                         ccSentCount: 1,
@@ -92,6 +94,7 @@ exports.processInput = function(email, isSent, input) {
                     }
                 } else {
                     frequency[email][from.address] = {
+                        relatedName: from.name,
                         receivedCount: 1,
                         sentCount: 0,
                         ccSentCount: 0,
