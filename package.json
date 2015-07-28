@@ -38,6 +38,7 @@
     "request": "2.57.x",
     "rfr": "1.2.x",
     "selectn": "0.9.x",
+    "seraph": "^0.13.2",
     "string": "3.3.x",
     "underscore": "1.8.x",
     "xoauth2": "1.0.x"

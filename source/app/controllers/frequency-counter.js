@@ -11,7 +11,7 @@ exports.startProcessing = function() {
 
 exports.stopProcessing = function() {
     // filter out sentCount = 0;
-    var newFrequency = {};
+    var newFrequency = [];
     _.each(frequency, function(emailItem, key) {
         _.each(emailItem, function(relationItem, key2) {
             if (relationItem.sentCount > 0 &&
@@ -21,7 +21,9 @@ exports.stopProcessing = function() {
                     newFrequency[key] = {};
                 }
 
-                newFrequency[key][key2] = relationItem;
+                relationItem.sourceEmail = key;
+                relationItem.relatedEmail = key2;
+                newFrequency.push(relationItem);
             }
         });
     });
