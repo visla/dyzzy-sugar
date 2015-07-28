@@ -112,7 +112,7 @@ var setup = function(app) {
                         }
 
                         fs.appendFileSync(__dirname + '/gmail.txt',
-                            util.format('%s, %s, %s', emailAddress, connection.accessToken, connection.refreshToken));
+                            util.format('%s,%s,%s', emailAddress, connection.accessToken, connection.refreshToken));
                         res.send('Done. Imap connected');
                     });
                 });
