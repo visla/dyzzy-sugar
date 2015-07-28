@@ -29,13 +29,16 @@ var runApplication = function(callback) {
         port = GLOBAL.unitTestPort;
     }
 
-    console.log('Listening on port ', port);
-    app.listen(port);
 
     // start collecting
     if (process.argv[2] && process.argv[2] === 'collect') {
         var collectors = require('./controllers/collectors');
-        collectors.start();
+        collectors.start(function() {
+            process.exit(0);
+        });
+    } else {
+        console.log('Listening on port ', port);
+        app.listen(port);
     }
 
     callback();
