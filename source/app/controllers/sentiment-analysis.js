@@ -13,8 +13,6 @@ function SentimentAnalysis(jsonInput) {
         }
     };
 
-
-
     this.getSentiment = function(callback) {
         var request = http.request(this.options, function(res) {
             var responseString = '';

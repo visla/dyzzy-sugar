@@ -36,6 +36,11 @@ var runApplication = function(callback) {
         collectors.start(function() {
             process.exit(0);
         });
+    } else if (process.argv[2] && process.argv[2] === 'analyze') {
+        var analyzers = require('./controllers/analyzers');
+        analyzers.start(function() {
+            process.exit(0);
+        });
     } else {
         console.log('Listening on port ', port);
         app.listen(port);
