@@ -1,0 +1,96 @@
+
+
+/**
+*
+* GENERAL DELETE FUNCTION
+*/
+
+MATCH (n)
+OPTIONAL MATCH (n)-[r]-()
+DELETE n,r
+
+/**
+*  CONSTRAINTS AND INDEXES
+*
+*/
+CREATE CONSTRAINT ON (person:Person) ASSERT person.email IS UNIQUE
+
+//Create index on company
+create index on :Person(company);
+
+
+/**
+* DATA
+*
+*/
+CREATE (`andreas@sugarcrm.com`:Person {first_name:'Andreas', last_name:'Sandberg',email:'andreas@sugarcrm.com', company:'SugarCRM'})
+CREATE (`henry@sugarcrm.com`:Person {first_name:'Henry', last_name:'Rodgers',email:'henry@sugarcrm.com', company:'SugarCRM'})
+CREATE (`andre@sugarcrm.com`:Person {first_name:'Andre', last_name:'Green',email:'andre@sugarcrm.com', company:'SugarCRM'})
+CREATE (`will@sugarcrm.com`:Person {first_name:'Will', last_name:'Vislovski',email:'will@sugarcrm.com', company:'SugarCRM'})
+CREATE (`sam@sugarcrm.com`:Person {first_name:'Sam', last_name:'Chakrabarty',email:'sam@sugarcrm.com', company:'SugarCRM'})
+CREATE (`yuk@sugarcrm.com`:Person {first_name:'Yuk', last_name:'Suen',email:'yuk@sugarcrm.com', company:'SugarCRM'})
+
+CREATE
+    (`andreas@sugarcrm.com`)-[:KNOWS {frequency: 1, sentiment:1}]->(`henry@sugarcrm.com`),
+    (`andreas@sugarcrm.com`)-[:KNOWS {frequency: 2, sentiment:5}]->(`andre@sugarcrm.com`),
+    (`andreas@sugarcrm.com`)-[:KNOWS {frequency: 4, sentiment:3}]->(`will@sugarcrm.com`),
+
+    (`henry@sugarcrm.com`)-[:KNOWS {frequency: 2, sentiment:7}]->(`andreas@sugarcrm.com`),
+    (`henry@sugarcrm.com`)-[:KNOWS {frequency: 6, sentiment:5}]->(`andre@sugarcrm.com`),
+
+    (`andre@sugarcrm.com`)-[:KNOWS {frequency: 3, sentiment:4}]->(`will@sugarcrm.com`),
+
+    (`will@sugarcrm.com`)-[:KNOWS {frequency: 12, sentiment:7}]->(`yuk@sugarcrm.com`),
+    (`andre@sugarcrm.com`)-[:KNOWS {frequency: 2, sentiment:7}]->(`yuk@sugarcrm.com`),
+
+    (`will@sugarcrm.com`)-[:KNOWS {frequency: 2, sentiment:7}]->(`sam@sugarcrm.com`)
+
+
+
+/**
+* QUERIES
+*
+*/
+
+//Find shortest path between andreas and sam
+MATCH (a:Person { email:"andreas@sugarcrm.com" }),(b:Person { email:"sam@sugarcrm.com" }), p = shortestPath((a)-[*..15]-(b))RETURN p
+
+//All paths from me to yuk
+MATCH (a:Person { email:"andreas@sugarcrm.com" }),(b:Person { email:"yuk@sugarcrm.com" }), p = allShortestPaths((a)-[*..15]-(b))RETURN p
+
+
+//Best path from me to yuk based on highest frequency
+MATCH (from: Person {email:"andreas@sugarcrm.com"}), (to: Person {email:"yuk@sugarcrm.com"}) ,
+paths = allShortestPaths((from)-[:KNOWS*]->(to))
+WITH REDUCE(dist = 0, rel in rels(paths) | dist + rel.frequency) AS frequency, paths
+RETURN paths, frequency
+ORDER BY frequency  DESC
+LIMIT 1
+
+//Find user with most connections for a user at a given company
+MATCH (n:Person)-[r]->(x)
+WHERE n.company = 'sugarcrm'
+RETURN n, COUNT(r)
+ORDER BY COUNT(r) DESC
+LIMIT 10
+
+
+MATCH (Person { email:'andreas@sugarcrm.com' })-[r]->(*)
+RETURN r
+
+//All the people I know
+MATCH (charlie:Person { email:'andreas@sugarcrm.com' })--(movie:Person)
+RETURN movie
+
+
+//Everybody a user knows in their first degree network
+MATCH (a { email:'andreas@sugarcrm.com' })-[:KNOWS*1]-(x)
+RETURN x
+
+//Everybody a user knows in their second degree network
+MATCH (a { email:'andreas@sugarcrm.com' })-[:KNOWS*1..2]-(x)
+RETURN x
+
+
+//Everybody a user knows in their first degree they have a low frequency with
+MATCH (from { email:'andreas@sugarcrm.com' })-[r:KNOWS*1]-(to) return filter(x in r where x.frequency < 2)
