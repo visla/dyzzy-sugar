@@ -32,6 +32,7 @@
     "googleapis": "^2.1.1",
     "imap": "0.8.x",
     "mailparser": "0.5.x",
+    "mathjs": "^2.0.0",
     "moment": "2.10.*",
     "moment-timezone": "0.3.*",
     "node-uuid": "1.4.x",
