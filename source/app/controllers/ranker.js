@@ -21,7 +21,7 @@ exports.getScore = function(emailData) {
 var processCountDiff = function(sent, received) {
     var total = sent + received;
     var diff = math.abs(sent - received);
-    var score = .5*math.pow(math.e, -math.pow(diff/2, 2) + sent/total + received/total);
+    var score = .5*math.pow(math.e, -math.pow(diff/2, 2)) + sent/total + received/total;
     return countDiffWeight*score;
 };
 
