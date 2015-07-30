@@ -2,14 +2,13 @@
 
 var math = require('mathjs');
 
-var countDiffWeight = .1;
-var loneCountWeight = .2;
-var nullScore = .1;
+var countDiffWeight = .5;
+var loneCountWeight = countDiffWeight/4;
+var nullScore = .5*loneCountWeight;
 var currentDate = new Date();
 
 exports.getScore = function(emailData) {
     var sum = 0;
-
     sum += processCountDiff(emailData.sentCount, emailData.receivedCount);
     sum += emailData.ccSentCount === 0 ? nullScore : processLoneCounts(emailData.ccSentCount);
     sum += emailData.lastSentEmail ? processDates(emailData.lastSentEmail) : nullScore;
@@ -22,7 +21,7 @@ exports.getScore = function(emailData) {
 var processCountDiff = function(sent, received) {
     var total = sent + received;
     var diff = math.abs(sent - received);
-    var score = math.pow(math.e, -math.pow(diff/2, 2) + sent/total + received/total);
+    var score = .5*math.pow(math.e, -math.pow(diff/2, 2) + sent/total + received/total);
     return countDiffWeight*score;
 };
 
