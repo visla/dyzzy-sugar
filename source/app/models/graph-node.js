@@ -3,11 +3,39 @@
 var util = require('util');
 
 // To http://localhost:7474/db/data with user "local" and pass "test"
-var dbLocal = require('seraph')({ server: "http://52.10.156.36:7474",
-                                   user: "neo4j",
-                                   pass: "rootpass" });
+var dbLocal = require('seraph')({
+    server: "http://52.10.156.36:7474",
+    user: 'neo4j',
+    pass: 'rootpass'
+});
 
 var map = {};
+
+
+exports.ifExists = function(sourceEmail, relatedEmail, callback){
+
+    dbLocal.find({email:sourceEmail}, function(err, sourceObjs){
+        if(err) throw err;
+        dbLocal.find({email:relatedEmail}, function(err, relatedObjs){
+            if(err) throw err;
+            callback(sourceObjs.length>0 && relatedObjs.length>0);
+        });
+    });
+    
+}
+
+exports.ifExistsAdd = function(sourceEmail, relatedEmail, attributeName, attributeValue, callback){
+
+    dbLocal.find({email:sourceEmail}, function(err, sourceObjs){
+        if(err) throw err;
+        dbLocal.find({email:relatedEmail}, function(err, relatedObjs){
+            if(err) throw err;
+            callback(sourceObjs.length>0 && relatedObjs.length>0, sourceEmail, relatedEmail, attributeName, attributeValue);
+        });
+    });
+    
+}
+
 
 function getNodeId(email, callback) {
     dbLocal.find({ email: email}, function(err, node) {
